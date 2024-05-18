@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour, Controls.IPlayerActions
 {
     private Controls controls;
+    private Actor actorComponent;
     
 
     private void Awake()
@@ -15,6 +16,17 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
     private void Start()
     {
         Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -5);
+
+        actorComponent = GetComponent<Actor>();
+        
+        if (actorComponent != null)
+        {
+            GameManager.Get.SetPlayer(actorComponent);
+        }
+        else
+        {
+            Debug.LogError("no actor component found");
+        }
     }
 
     private void OnEnable()
