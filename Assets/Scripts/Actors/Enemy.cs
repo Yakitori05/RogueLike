@@ -23,20 +23,34 @@ public class Enemy : MonoBehaviour
     }
     public void RunAI()
     {
-        if (target == null)
+        if (target == null || target.Equals(null))
         {
             target = GameManager.Get.GetPlayer();
         }
 
+        if(target == null)
+        {
+            return;
+        }
+
         Vector3Int targetGridPosition = MapManager.Get.FloorMap.WorldToCell(transform.position);
-        Vector3Int gridPosition = MapManager.Get.FloorMap.WorldToCell(transform.position);
-        if (IsFighting || GetComponent<Actor>().FieldOfView.Contains(gridPosition))
+        if (IsFighting || GetComponent<Actor>().FieldOfView.Contains(targetGridPosition))
         {
             if (!IsFighting)
             {
                 IsFighting = true;
             }
-            MoveOnPath(targetGridPosition);
+
+            float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+
+            if (distanceToTarget < 1.5f)
+            {
+                Action.Hit(GetComponent<Actor>(), target);
+            }
+            else
+            {
+                MoveOnPath(targetGridPosition);
+            }
         }
     }
 }

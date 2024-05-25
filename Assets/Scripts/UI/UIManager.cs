@@ -51,11 +51,11 @@ public class UIManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void UpdateHealth(int curren, int max)
+    public void UpdateHealth(int current, int max)
     {
         if (healthBar != null)
         {
-            healthBar.SetValues(curren, max);
+            healthBar.SetValues(current, max);
         }
         else
         {

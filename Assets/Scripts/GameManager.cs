@@ -90,4 +90,12 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    public void RemoveEnemy (Actor enemy)
+    {
+        if (enemies.Contains(enemy))
+        {
+            Enemies.Remove(enemy);
+            Destroy(enemy.gameObject);
+        }
+    }
 }
