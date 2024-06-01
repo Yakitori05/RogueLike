@@ -8,8 +8,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Get { get => instance; }
 
     private List<Actor> enemies = new List<Actor>();
+    public List<Consumable> Items { get; private set; } = new List<Consumable>();
     public List<Actor> Enemies { get => enemies; }
-    private Actor player;
+    public Actor player;
 
     private void Awake()
     {
@@ -51,7 +52,17 @@ public class GameManager : MonoBehaviour
         }
         return null;
     }
-    
+    public Consumable GetItemAtLocation (Vector3 location)
+    {
+        foreach (var item in Items)
+        {
+            if (item != null && item.transform.position == location) 
+            { 
+                return item; 
+            }
+        }
+        return null;
+    }
     public Actor CreateActor(string type, Vector2 position)
     {
         GameObject actorPrefab = Resources.Load<GameObject>($"Prefabs/{type}");
@@ -97,5 +108,37 @@ public class GameManager : MonoBehaviour
             Enemies.Remove(enemy);
             Destroy(enemy.gameObject);
         }
+    }
+    public GameObject CreateItem (string name, Vector2 position)
+    {
+        GameObject item = Instantiate(Resources.Load<GameObject>($"prefabs/{name}"), new Vector3(position.x + 0.5f, position.y + 0.5f, 0), Quaternion.identity);
+        AddItem(item.GetComponent<Consumable>());
+        item.name = name;
+        return item;
+    }
+    public void AddItem (Consumable item)
+    {
+        Items.Add(item);
+    }
+    public void RemoveItem(Consumable item)
+    {
+        if (Items.Contains(item))
+        {
+            Items.Remove(item);
+            Destroy(item.gameObject);
+        }
+    }
+    public List <Actor> GetNearbyEnemies (Vector3 location)
+    {
+        List<Actor> nearbyEnemies = new List<Actor>();
+
+        foreach (Actor enemy in Enemies)
+        {
+            if (Vector3.Distance(enemy.transform.position, location) < 5)
+            {
+                nearbyEnemies.Add(enemy);
+            }
+        }
+        return nearbyEnemies;
     }
 }

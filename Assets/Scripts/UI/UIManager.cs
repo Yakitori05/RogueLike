@@ -6,7 +6,9 @@ public class UIManager : MonoBehaviour
 
     public GameObject HealthBar;
     public GameObject Messages;
+    public GameObject Inventory;
 
+    private InventoryUI inventoryUI { get => Inventory.GetComponent<InventoryUI>(); }
     private HealthBar healthBar;
     private Messages messageController;
     // Start is called before the first frame update

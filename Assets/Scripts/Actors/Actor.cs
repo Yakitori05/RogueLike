@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Actor : MonoBehaviour
@@ -88,6 +89,25 @@ public class Actor : MonoBehaviour
         if (GetComponent<Player>())
         {
             MapManager.Get.UpdateFogMap(FieldOfView);
+        }
+    }
+
+    public void Health (int hp)
+    {
+        int previoushp = hp;
+        hp += hp;
+        
+        if (hp > maxHP)
+        {
+            hp = maxHP;
+        }
+
+        int amounthealed = hp - previoushp;
+
+        if (GetComponent<Player>())
+        {
+            UIManager.Instance.UpdateHealth(hp, maxHP);
+            UIManager.Instance.AddMessages($"You have been healed by {amounthealed} hp", Color.green);
         }
     }
 }

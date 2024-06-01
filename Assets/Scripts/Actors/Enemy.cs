@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     public Actor target {  get; set; }
     public bool IsFighting { get; private set; } = false;
     private AStar Algorithm;
+    private int confused = 0;
     private void Start()
     {
         Actor actor = GetComponent<Actor>();
@@ -33,6 +34,13 @@ public class Enemy : MonoBehaviour
             return;
         }
 
+        if (confused > 0)
+        {
+            confused--;
+            UIManager.Instance.AddMessages($"{name} is canfuesd and can't move", Color.cyan);
+            return;
+        }
+
         Vector3Int targetGridPosition = MapManager.Get.FloorMap.WorldToCell(transform.position);
         if (IsFighting || GetComponent<Actor>().FieldOfView.Contains(targetGridPosition))
         {
@@ -52,5 +60,10 @@ public class Enemy : MonoBehaviour
                 MoveOnPath(targetGridPosition);
             }
         }
+    }
+
+    public void Confuse()
+    {
+        confused = 8;
     }
 }
