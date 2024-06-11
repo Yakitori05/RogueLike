@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ public class HealthBar : MonoBehaviour
     private VisualElement root;
     private VisualElement healthBar;
     private Label healthLabel;
+    private Label levelLabel;
+    private Label xpLabel;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,5 +43,21 @@ public class HealthBar : MonoBehaviour
 
         healthBar.style.width = new Length(percent, LengthUnit.Percent);
         healthLabel.text = $"{currentHP}/{maxHP} HP";
+    }
+
+    public void SetLevel (int level)
+    {
+        if(levelLabel != null)
+        {
+            levelLabel.text = $"level: {level}";
+        }
+    }
+
+    public void SetXp(int xp)
+    {
+        if (xpLabel != null)
+        {
+            xpLabel.text = $"xp: {xp}";
+        }
     }
 }

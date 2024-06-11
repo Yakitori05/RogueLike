@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
     private List<Actor> enemies = new List<Actor>();
     public List<Consumable> Items { get; private set; } = new List<Consumable>();
     public List<Actor> Enemies { get => enemies; }
+    public List<Ladder> Ladders = new List<Ladder>();
     public Actor player;
 
     private void Awake()
@@ -59,6 +61,18 @@ public class GameManager : MonoBehaviour
             if (item != null && item.transform.position == location) 
             { 
                 return item; 
+            }
+        }
+        return null;
+    }
+
+    public Ladder GetLadderAtLocation (Vector3 location)
+    {
+        foreach (var ladder in Ladders)
+        {
+            if (ladder.transform.position == location)
+            {
+                return ladder;
             }
         }
         return null;
@@ -120,6 +134,11 @@ public class GameManager : MonoBehaviour
     {
         Items.Add(item);
     }
+
+    public void AddLadder(Ladder ladder)
+    {
+        Ladders.Add(ladder);
+    }
     public void RemoveItem(Consumable item)
     {
         if (Items.Contains(item))
@@ -140,5 +159,32 @@ public class GameManager : MonoBehaviour
             }
         }
         return nearbyEnemies;
+    }
+
+    public void ClearLevel()
+    {
+        foreach(var enemy in Enemies)
+        {
+            Destroy(enemy.gameObject);
+        }
+        Enemies.Clear();
+
+        foreach(var item in Items)
+        {
+            Destroy(item.gameObject);
+        }
+        Items.Clear();
+
+        foreach (var ladder in Ladders)
+        {
+            Destroy(ladder.gameObject);
+        }
+        Ladders.Clear();
+
+        //*foreach (var tombstone in Tombstones)
+        //*{
+        //*    Destroy(tombstone.gameObject);
+        //*}
+        //*Tombstones.Clear();
     }
 }

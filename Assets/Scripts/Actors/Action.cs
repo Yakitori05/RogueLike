@@ -31,7 +31,7 @@ public class Action : MonoBehaviour
 
         if (damage > 0)
         {
-            target.DoDamage(damage);
+            target.DoDamage(damage, actor);
             UIManager.Instance.AddMessages($"{actor.name} hits {target.name} for {damage} damage", actor.GetComponent<Player>() ? Color.white : Color.red);
         }
         else

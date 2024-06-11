@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEditor;
+using Unity.Mathematics;
+using System;
 
 public class Actor : MonoBehaviour
 {
@@ -14,12 +16,18 @@ public class Actor : MonoBehaviour
     [SerializeField] private int hp = 30;
     [SerializeField] private int defense;
     [SerializeField] private int power;
+    [SerializeField] private int level = 1;
+    [SerializeField] private int xp;
+    [SerializeField] private int xptonextlevel = 50;
 
 
     public int MaxHP => maxHP;
     public int HP => hp;
     public int Defense => defense;
      public int Power => power;
+    public int Level => level;
+    public int Xp => xp;
+    public int Xptonextlevel => xptonextlevel;
 
     private void Start()
     {
@@ -29,6 +37,8 @@ public class Actor : MonoBehaviour
         if (GetComponent<Player>())
         {
             UIManager.Instance.UpdateHealth(hp, maxHP);
+            UIManager.Instance.UpdateLevel(level);
+            UIManager.Instance.UpdateXp(xp);
         }
     }
 
@@ -51,7 +61,7 @@ public class Actor : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void DoDamage(int hp)
+    public void DoDamage(int hp, Actor enemy)
     {
         hp -= hp;
 
@@ -68,6 +78,7 @@ public class Actor : MonoBehaviour
         if (hp == 0)
         {
             Die();
+            enemy.Addxp(xp);
         }
     }
 
@@ -109,5 +120,30 @@ public class Actor : MonoBehaviour
             UIManager.Instance.UpdateHealth(hp, maxHP);
             UIManager.Instance.AddMessages($"You have been healed by {amounthealed} hp", Color.green);
         }
+    }
+
+    public void Addxp(int xp)
+    {
+        this.xp += xp;
+
+        while (this.xp >= xptonextlevel)
+        {
+            this.xp -= xptonextlevel;
+            Levelup();
+        }
+
+        if (GetComponent<Player>())
+        {
+            UIManager.Get.UpdateXp(this.xp);
+        }
+    }
+
+    public void Levelup()
+    {
+        level++;
+        xptonextlevel = (int)Math.Round((double)xptonextlevel, MidpointRounding.ToEven);
+        maxHP += 15;
+        defense += 2;
+        power += 2;
     }
 }

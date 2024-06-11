@@ -11,6 +11,7 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
     private bool inventoryIsOpen = false;
     private bool droppingItem = false;
     private bool usingItem = false;
+    private bool isonladder = false;
 
 
     private void Awake()
@@ -165,6 +166,32 @@ public class Player : MonoBehaviour, Controls.IPlayerActions
                 inventoryIsOpen = true;
                 usingItem = true;
             }
+        }
+    }
+
+    public void CheckForLadder()
+    {
+        Vector3 playerPosition = transform.position;
+        Ladder ladder = GameManager.Get.GetLadderAtLocation(playerPosition);
+
+        if (ladder != null)
+        {
+            if (ladder.up)
+            {
+                MapManager.Get.MoveUp();
+            }
+            else
+            {
+                MapManager.Get.MoveDown();
+            }
+        }
+    }
+
+    public void OnLadder(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            CheckForLadder();
         }
     }
 

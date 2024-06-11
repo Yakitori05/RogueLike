@@ -7,10 +7,13 @@ public class UIManager : MonoBehaviour
     public GameObject HealthBar;
     public GameObject Messages;
     public GameObject Inventory;
+    public GameObject LevelFloor;
 
     private InventoryUI inventoryUI { get => Inventory.GetComponent<InventoryUI>(); }
     private HealthBar healthBar;
     private Messages messageController;
+
+    public static UIManager Get { get => Instance; }
     // Start is called before the first frame update
 
     private void Awake()
@@ -55,14 +58,17 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     public void UpdateHealth(int current, int max)
     {
-        if (healthBar != null)
-        {
-            healthBar.SetValues(current, max);
-        }
-        else
-        {
-            Debug.LogError("healthbar is not assigned");
-        }
+        healthBar.SetValues(current, max);
+    }
+
+    public void UpdateLevel(int level)
+    {
+        healthBar.SetLevel(level);
+    }
+
+    public void UpdateXp(int xp)
+    {
+        healthBar.SetXp(xp);
     }
 
     public void AddMessages(string message, Color color)

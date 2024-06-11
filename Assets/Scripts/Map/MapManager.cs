@@ -46,6 +46,7 @@ public class MapManager : MonoBehaviour
     public int maxRooms = 30;
     public int maxEnemies = 2;
     public int maxItems = 2;
+    public int floor = 0;
 
     private void Start()
     {
@@ -147,6 +148,23 @@ public class MapManager : MonoBehaviour
             Tiles[pos].IsVisible = true;
             FogMap.SetColor(pos, Color.clear);
             VisibleTiles.Add(pos);
+        }
+    }
+
+    public void MoveUp()
+    {
+        GameManager.Get.ClearLevel();
+        floor++;
+        GenerateDungeon();
+    }
+
+    public void MoveDown()
+    {
+        if (floor > 0)
+        {
+            GameManager.Get.ClearLevel();
+            floor--;
+            GenerateDungeon();
         }
     }
 }

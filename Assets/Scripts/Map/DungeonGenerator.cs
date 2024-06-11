@@ -9,6 +9,7 @@ public class DungeonGenerator : MonoBehaviour
     private int maxRooms;
     private int maxEnemies;
     private int maxItems;
+    private int currentfloor;
     List<Room> rooms = new List<Room>();
 
     public void SetSize(int width, int height)
@@ -31,6 +32,11 @@ public class DungeonGenerator : MonoBehaviour
     public void SetMaxRooms(int max)
     {
         maxRooms = max;
+    }
+
+    public void SetCurrentfloor(int floor)
+    {
+        this.currentfloor = floor;
     }
 
     public void SetMaxEnemies(int maxEnemies)
@@ -88,6 +94,18 @@ public class DungeonGenerator : MonoBehaviour
             }
             rooms.Add(room);
 
+            if (rooms.Count > 0)
+            {
+                Vector3Int startp = new Vector3Int(rooms[0].Center().x, rooms[0].Center().y, 0);
+                Vector3Int endp = new Vector3Int(rooms[rooms.Count - 1].Center().x, rooms[rooms.Count - 1].Center().y, 0);
+
+                PlaceLadderDown(endp);
+
+                if (rooms.Count > 0)
+                {
+                    PlaceLadderUp(startp);
+                }
+            }
 
             PlaceEnemies(room, maxEnemies);
             PlaceItems(room, maxItems);
@@ -140,6 +158,16 @@ public class DungeonGenerator : MonoBehaviour
                 GameManager.Get.CreateActor("ScrollOfConfusion", new Vector2(x, y));
             }
         }
+    }
+
+    public void PlaceLadderDown(Vector3Int pos)
+    {
+        GameManager.Get.CreateActor("StairUp", new Vector2(pos.x, pos.y));
+    }
+
+    public void PlaceLadderUp(Vector3Int pos)
+    {
+        GameManager.Get.CreateActor("StairDown", new Vector2(pos.x, pos.y));
     }
 
     private bool TrySetWallTile(Vector3Int pos)
